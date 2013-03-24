@@ -71,7 +71,7 @@ public class skillLancer implements ImageObserver {
 
     @Override
     public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-        System.out.println(" 1:" + arg1 + " 2:" + arg2 + " 3:" + arg3 + " 4:" + arg4 + " 5:" + arg5);
+      //  System.out.println(" 1:" + arg1 + " 2:" + arg2 + " 3:" + arg3 + " 4:" + arg4 + " 5:" + arg5);
         width = arg4 / imgNbr;
         height = arg5;
         return true;
