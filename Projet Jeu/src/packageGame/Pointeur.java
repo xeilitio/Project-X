@@ -20,9 +20,6 @@ public class Pointeur {
            pointeurs.add(Toolkit.getDefaultToolkit().getImage("Images/Pointeur"+(i+1)+".png"));
        }
     }
-    public int getSkill(){
-        return index;
-    }
     public void paint(Graphics g, int Mx, int My){
         g.setColor(new Color(255, 0, 0, 0));
         g.drawImage(pointeurs.get(index), Mx, My, null);

@@ -444,10 +444,14 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
         int rot = e.getWheelRotation();
-        if (rot < 0)
+        if (rot < 0){
             pointeur.incImg();
-        else if (rot > 0)
+            skill.incSkill();
+        }
+        else if (rot > 0){
             pointeur.decImg();
+            skill.decSkill();
+        }
     }
   
 }

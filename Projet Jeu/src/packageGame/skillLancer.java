@@ -12,24 +12,26 @@ public class skillLancer implements ImageObserver {
     int counter = 0;
     String skillSelect[] = {"Explosion", "Eclat"} ;
     Image iSkill;
-    int x;
+    int X;
     int width;
     int height;
     boolean affiche;
     int nombreImages[] = {6, 9};
     Pointeur pointeur;
+    private int imgNbr;
     
     public skillLancer(){
         pointeur = new Pointeur();
-        x = pointeur.getSkill();
-        iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[x]+".png");
+       t = new TimerRun();
+        new Thread(t).start();
+        iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
         width = iSkill.getWidth(this);
         height = iSkill.getHeight(this);
-        t = new TimerRun();
-        new Thread(t).start();
+        imgNbr = nombreImages[0];
         
     }
-    
+   
+
     public void paint(Graphics g, int x, int y) {
         if (affiche) {
             g.setColor(new Color(255, 0, 0, 0));
@@ -68,8 +70,24 @@ public class skillLancer implements ImageObserver {
     @Override
     public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
         System.out.println(" 1:" + arg1 + " 2:" + arg2 + " 3:" + arg3 + " 4:" + arg4 + " 5:" + arg5);
-        width = arg4 / nombreImages[x];
+        width = arg4 / imgNbr;
         height = arg5;
         return true;
+    }
+
+    public void incSkill() {
+        if (X < 9){
+        X++;
+        imgNbr = nombreImages[X];
+        iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
+        }
+    }
+
+    public void decSkill() {
+        if (X > 0){
+            X--;
+        imgNbr = nombreImages[X];
+        iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
+        }
     }
 }
