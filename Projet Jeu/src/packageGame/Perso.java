@@ -65,14 +65,6 @@ public class Perso {
         return PersoMov;
     }
 
-    public void setx(int newx) {
-        x = newx;
-    }
-
-    public void sety(int newy) {
-        y = newy;
-    }
-
     public void setMov(int newMov) {
         if (PersoMov != newMov) {
             PersoMov = newMov;

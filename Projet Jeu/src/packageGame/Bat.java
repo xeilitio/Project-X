@@ -40,17 +40,6 @@ public class Bat {
         Rectangle Box = new Rectangle(x, y , width, height);
         return Box;
     }
-    public int getx() {
-        return x;
-    }
-
-    public int gety() {
-        return y;
-    }
-    
-    public Image getImage(){
-        return BatImg;
-    }
     
     public void paint(Graphics g) {
         g.setColor(new Color(255, 0, 0, 0));

@@ -5,16 +5,24 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.io.FileReader;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class Plateau extends JPanel implements KeyListener {
+public class Plateau extends JPanel implements MouseWheelListener, MouseMotionListener, MouseListener, KeyListener {
     String Map[][] = new String[20][15];
     static int Level = 1;
+    int x,y;
     private static ArrayList<Mur> Murs;
     private static ArrayList<Objectif> Objectifs;
     private static ArrayList<Caisse> Caisses;
@@ -45,24 +53,32 @@ public class Plateau extends JPanel implements KeyListener {
     int vitesse = 5;
     int time = 0, timeR = 0;
     TimerRun t;
-    BarreHP hp;
+    BarreHP barHP;
     boolean enVie = true;
+    skillLancer skill;
+    Pointeur pointeur;
+    int Mx,My;
+    int image=1;
+    int indexInc = 0;
     
     public Plateau() {
-
+        skill = new skillLancer();
         t = new TimerRun();
         setFocusable(true);
         addKeyListener(this);
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        addMouseWheelListener(this);
         ChargementLevel();
-        hp = new BarreHP(perso, this);
-        new Thread(hp).start();
+        barHP = new BarreHP(perso, this);
+        new Thread(barHP).start();
+        pointeur = new Pointeur();
     }
 
     public void ChargementLevel() {
         try {
             fr = new FileReader("Maps/level" + Level + ".lvl");
             int x = 0, y = 0, i = 1;
-
             Murs = new ArrayList<Mur>();
             Caisses = new ArrayList<Caisse>();
             Objectifs = new ArrayList<Objectif>();
@@ -101,16 +117,20 @@ public class Plateau extends JPanel implements KeyListener {
                     x++;
                 }
             }
+            perso.hp = 100;
             new Thread(t).start();
             t.restart();
         } catch (Exception e) {}
-        new Thread(hp).start();
+        new Thread(barHP).start();
     }
 
     public void paint(Graphics g) {
         super.paint(g);
         Graphics2D g2d = (Graphics2D) g;
         checkVie();
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      
+        
         for (Mur mur : Murs) {
             g2d.drawImage(mur.getImage(), mur.getx(), mur.gety(), null);
         }
@@ -126,15 +146,21 @@ public class Plateau extends JPanel implements KeyListener {
         if (enVie){
         perso.paint(g);
         }
+        pointeur.paint(g, Mx, My);
+        skill.paint(g, x - 64, y - 64);
         g.setColor(Color.BLACK);
         g.setFont(levelFont);
         g.drawString("Level : " + Level, 500, 25);
-        if (enVie == false){
-            g.setFont(Screen);
-            g.drawString("Vous etes mort", 120, getHeight()/2);
-        }
         
-        if(enVie){
+        if (enVie == false){
+            g.fillRect(0,0, getWidth(),getHeight());
+            g.setFont(Screen);
+            g.setColor(Color.white);
+            g.drawString("Vous êtes mort", 120, getHeight()/2);
+            mort();
+        }
+        else
+        {
         deplacement();
         }
         // refresh();
@@ -142,10 +168,15 @@ public class Plateau extends JPanel implements KeyListener {
     }
 
     
+    public void mort() {
+        // TODO Auto-generated method stub
+        
+    }
+
     public void checkVie(){
         if (perso.hp <= 0){
             enVie = false;
-            hp.setVisiBar(false);
+            barHP.setVisiBar(false);
         }
     }
     
@@ -177,7 +208,7 @@ public class Plateau extends JPanel implements KeyListener {
             perso.Move();
         }
     }
-
+    
     public void checkCollisions() {
         Rectangle persoBox = perso.getBounds();
         for (int i = 0; i < Murs.size(); i++) {
@@ -254,20 +285,7 @@ public class Plateau extends JPanel implements KeyListener {
                         perso.setCol(COL_D);
                     }
                 }
-                for (int z = 0; z < Objectifs.size(); z++) {
-
-                    objectif = (Objectif) Objectifs.get(z);
-                    Rectangle objectifRec = objectif.getBounds();
-
-                    for (int j = 0; j < Caisses.size(); j++) {
-
-                        caisse = (Caisse) Caisses.get(z);
-                        Rectangle caisseBox = caisse.getBounds();
-
-                    }
-                }
             }
-
         }
 
     }
@@ -276,33 +294,61 @@ public class Plateau extends JPanel implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int Key = e.getKeyCode();
         final int keyup = KeyEvent.VK_UP;
+        final int keyup2 = KeyEvent.VK_W;
         final int keydown = KeyEvent.VK_DOWN;
+        final int keydown2 = KeyEvent.VK_S;
         final int keyL = KeyEvent.VK_LEFT;
+        final int keyL2 = KeyEvent.VK_A;
         final int keyR = KeyEvent.VK_RIGHT;
+        final int keyR2 = KeyEvent.VK_D;
         if (keypressed) {
             switch (old_key) {
                 case keyup:
-                    if (Key == keyL)
+                    if (Key == keyL ||Key == keyL2)
                         perso.setMov(HAUT_GAUCHE);
-                    else if (Key == keyR)
+                    else if (Key == keyR || Key == keyR2)
                         perso.setMov(HAUT_DROITE);
                     break;
                 case keydown:
-                    if (Key == keyL)
+                    if (Key == keyL || Key == keyL2)
                         perso.setMov(BAS_GAUCHE);
-                    else if (Key == keyR)
+                    else if (Key == keyR || Key == keyR2)
                         perso.setMov(BAS_DROITE);
                     break;
                 case keyL:
-                    if (Key == keyup)
+                    if (Key == keyup || Key == keyup2)
                         perso.setMov(HAUT_GAUCHE);
-                    else if (Key == keydown)
+                    else if (Key == keydown || Key == keydown2)
                         perso.setMov(BAS_GAUCHE);
                     break;
                 case keyR:
-                    if (Key == keyup)
+                    if (Key == keyup || Key == keyup2)
                         perso.setMov(HAUT_DROITE);
-                    else if (Key == keydown)
+                    else if (Key == keydown || Key == keydown2)
+                        perso.setMov(BAS_DROITE);
+                    break;
+                case keyup2:
+                    if (Key == keyL ||Key == keyL2)
+                        perso.setMov(HAUT_GAUCHE);
+                    else if (Key == keyR || Key == keyR2)
+                        perso.setMov(HAUT_DROITE);
+                    break;
+                case keydown2:
+                    if (Key == keyL || Key == keyL2)
+                        perso.setMov(BAS_GAUCHE);
+                    else if (Key == keyR || Key == keyR2)
+                        perso.setMov(BAS_DROITE);
+                    break;
+                case keyL2:
+                    if (Key == keyup || Key == keyup2)
+                        perso.setMov(HAUT_GAUCHE);
+                    else if (Key == keydown || Key == keydown2)
+                        perso.setMov(BAS_GAUCHE);
+                    break;
+                case keyR2:
+                    if (Key == keyup || Key == keyup2)
+                        perso.setMov(HAUT_DROITE);
+                    else if (Key == keydown || Key == keydown2)
                         perso.setMov(BAS_DROITE);
                     break;
                 case KeyEvent.VK_SHIFT:
@@ -311,13 +357,13 @@ public class Plateau extends JPanel implements KeyListener {
             }
 
         } else {
-            if (Key == keydown) {
+            if (Key == keydown || Key == keydown2) {
                 perso.setMov(BAS);
-            } else if (Key == keyup) {
+            } else if (Key == keyup || Key == keyup2) {
                 perso.setMov(HAUT);
-            } else if (Key == keyR) {
+            } else if (Key == keyR || Key == keyR2) {
                 perso.setMov(DROITE);
-            } else if (Key == keyL) {
+            } else if (Key == keyL || Key == keyL2) {
                 perso.setMov(GAUCHE);
             }
             old_key = Key;
@@ -350,4 +396,58 @@ public class Plateau extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        x = e.getX();
+        y = e.getY();
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            skill.affiche();
+        }
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        Mx = e.getX() - 20;
+        My = e.getY() - 30;
+    }
+
+    @Override
+    public void mouseWheelMoved(MouseWheelEvent e) {
+        int rot = e.getWheelRotation();
+        if (rot < 0)
+            pointeur.incImg();
+        else if (rot > 0)
+            pointeur.decImg();
+    }
+  
 }

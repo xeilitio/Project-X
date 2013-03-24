@@ -11,16 +11,16 @@ public class TimerRun implements Runnable{
     
     public void run() {
             while(running){
-            try {
-                Thread.sleep(1);
-            } catch (Exception e) {}
-            counter++;
-            if (counter >= 1) {
-                time++;
-                timeR++;
-                timeF++;
-                counter=0;
-            }
+                try {
+                    Thread.sleep(1);
+                } catch (Exception e) {}
+                counter++;
+                if (counter >= 1) {
+                    time++;
+                    timeR++;
+                    timeF++;
+                    counter=0;
+                }
             }
             System.out.println("thread shutdown");
         }
@@ -40,6 +40,10 @@ public class TimerRun implements Runnable{
     }
     public void restart(){
         running = true;
+    }
+    
+    public void reset(){
+        time = 0;
     }
 }
 
