@@ -17,6 +17,7 @@ public class skillLancer implements ImageObserver {
     int height;
     boolean affiche;
     int nombreImages[] = {6, 9};
+    int Incant[] = {10, 25};
     Pointeur pointeur;
     private int imgNbr;
     
@@ -33,6 +34,7 @@ public class skillLancer implements ImageObserver {
    
 
     public void paint(Graphics g, int x, int y) {
+        
         if (affiche) {
             g.setColor(new Color(255, 0, 0, 0));
             g.drawImage(iSkill, x,
@@ -60,7 +62,7 @@ public class skillLancer implements ImageObserver {
             framex++;
             counter++;
             t.reset();
-            if (counter >= 5){
+            if (counter >= nombreImages[X]){
                 framex = counter = 0;
                 affiche = false;
             }
