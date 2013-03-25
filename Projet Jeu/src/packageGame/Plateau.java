@@ -60,9 +60,11 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
     int Mx,My;
     int image=1;
     int indexInc = 0;
+    int px;
+    int py;
     
     public Plateau() {
-        skill = new skillLancer();
+        skill = new skillLancer(Mx, My, px, py);
         t = new TimerRun();
         setFocusable(true);
         addKeyListener(this);
@@ -254,7 +256,7 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
             Rectangle caisseRec = caisse.getBounds();
 
             if (persoBox.intersects(caisseRec)) {
-                if (perso.getMov() == BAS) {
+                if (perso.getMov() == BAS || perso.getMov() == BAS_DROITE || perso.getMov() == BAS_GAUCHE) {
                     if (Map[caisseRec.x / 32][(caisseRec.y + 32) / 32] != "Mur") {
                         caisse.sety(caisse.gety() + 8);
                     } else {
@@ -262,7 +264,7 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
                     }
                 }
 
-                if (perso.getMov() == HAUT) {
+                if (perso.getMov() == HAUT || perso.getMov() == HAUT_GAUCHE || perso.getMov() == HAUT_DROITE) {
                     if (Map[caisseRec.x / 32][(caisseRec.y - 32) / 32] != "Mur") {
                         caisse.sety(caisse.gety() - 8);
                     } else {
@@ -270,7 +272,7 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
                     }
                 }
 
-                if (perso.getMov() == GAUCHE) {
+                if (perso.getMov() == GAUCHE || perso.getMov() == HAUT_GAUCHE || perso.getMov() == BAS_GAUCHE) {
                     if (Map[(caisseRec.x - 32) / 32][(caisseRec.y) / 32] != "Mur") {
                         caisse.setx(caisse.getx() - 8);
                     } else {
@@ -278,7 +280,7 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
                     }
                 }
 
-                if (perso.getMov() == DROITE) {
+                if (perso.getMov() == DROITE || perso.getMov() == HAUT_DROITE || perso.getMov() == BAS_DROITE) {
                     if (Map[(caisseRec.x - 32) / 32][(caisseRec.y + 32) / 32] != "Mur") {
                         caisse.setx(caisse.getx() + 8);
                     } else {

@@ -10,25 +10,25 @@ public class skillLancer implements ImageObserver {
     TimerRun t;
     int framex = 0;
     int counter = 0;
-    String skillSelect[] = {"Explosion", "Eclat"} ;
+    String skillSelect[] = {"Explosion", "Eclat", "Implosion"} ;
     Image iSkill;
     int X;
     int width;
     int height;
     boolean affiche;
-    int nombreImages[] = {6, 9};
-    int Incant[] = {10, 25};
+    int nombreImages[] = {6, 9, 10};
+    int Incant[] = {10, 25, 15};
     Pointeur pointeur;
     private int imgNbr;
     
-    public skillLancer(){
+    public skillLancer(int Mx, int My, int px, int py){
         pointeur = new Pointeur();
         t = new TimerRun();
         new Thread(t).start();
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
         width = iSkill.getWidth(this);
         height = iSkill.getHeight(this);
-        imgNbr = nombreImages[0];
+        imgNbr = nombreImages[X];
         
     }
    
@@ -51,10 +51,12 @@ public class skillLancer implements ImageObserver {
     
     public void affiche()
     {
+      //  if(mx - x =< )
+       // else{
         affiche = true;
         t.reset();
-        t.restart();
-    }
+        t.restart();}
+   // }
     
     public void refresh(){
         int time = t.GetTime();
@@ -82,6 +84,7 @@ public class skillLancer implements ImageObserver {
         X++;
         imgNbr = nombreImages[X];
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
+        System.out.println(skillSelect[X]);
         }
     }
 
