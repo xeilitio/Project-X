@@ -120,8 +120,8 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
             perso.hp = 100;
             new Thread(t).start();
             t.restart();
+            new Thread(barHP).start();
         } catch (Exception e) {}
-        new Thread(barHP).start();
     }
 
     public void paint(Graphics g) {

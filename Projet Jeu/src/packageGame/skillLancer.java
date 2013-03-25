@@ -23,7 +23,7 @@ public class skillLancer implements ImageObserver {
     
     public skillLancer(){
         pointeur = new Pointeur();
-       t = new TimerRun();
+        t = new TimerRun();
         new Thread(t).start();
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
         width = iSkill.getWidth(this);
