@@ -64,7 +64,7 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
     int py;
     
     public Plateau() {
-        skill = new skillLancer(Mx, My, px, py);
+        skill = new skillLancer(Mx, My);
         t = new TimerRun();
         setFocusable(true);
         addKeyListener(this);
@@ -149,7 +149,7 @@ public class Plateau extends JPanel implements MouseWheelListener, MouseMotionLi
         perso.paint(g);
         }
         pointeur.paint(g, Mx, My);
-        skill.paint(g, x - 64, y - 64);
+        skill.paint(g, x, y);
         g.setColor(Color.BLACK);
         g.setFont(levelFont);
         g.drawString("Level : " + Level, 500, 25);

@@ -19,16 +19,14 @@ public class skillLancer implements ImageObserver {
     int nombreImages[] = {6, 9, 10};
     int Incant[] = {10, 25, 15};
     Pointeur pointeur;
-    private int imgNbr;
     
-    public skillLancer(int Mx, int My, int px, int py){
+    public skillLancer(int Mx, int My){
         pointeur = new Pointeur();
         t = new TimerRun();
         new Thread(t).start();
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
         width = iSkill.getWidth(this);
         height = iSkill.getHeight(this);
-        imgNbr = nombreImages[X];
         
     }
    
@@ -37,10 +35,10 @@ public class skillLancer implements ImageObserver {
         
         if (affiche) {
             g.setColor(new Color(255, 0, 0, 0));
-            g.drawImage(iSkill, x,
-                                y, 
-                                x + width,
-                                y + height,
+            g.drawImage(iSkill, x - (width / 2),
+                                y - (height / 2), 
+                                x - (width / 2) + width,
+                                y - (height / 2) + height,
                                 width * framex,
                                 0,
                                 width * framex + width,
@@ -82,7 +80,6 @@ public class skillLancer implements ImageObserver {
     public void incSkill() {
         if (X < 9){
         X++;
-        imgNbr = nombreImages[X];
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
         width = iSkill.getWidth(this)/ nombreImages[X];;
         height = iSkill.getHeight(this);
@@ -94,7 +91,6 @@ public class skillLancer implements ImageObserver {
     public void decSkill() {
         if (X > 0){
             X--;
-        imgNbr = nombreImages[X];
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
         width = iSkill.getWidth(this)/ nombreImages[X];;
         height = iSkill.getHeight(this);
