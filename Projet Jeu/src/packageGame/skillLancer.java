@@ -73,8 +73,8 @@ public class skillLancer implements ImageObserver {
 
     @Override
     public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-      //  System.out.println(" 1:" + arg1 + " 2:" + arg2 + " 3:" + arg3 + " 4:" + arg4 + " 5:" + arg5);
-        width = arg4 / imgNbr;
+        System.out.println(" 1:" + arg1 + " 2:" + arg2 + " 3:" + arg3 + " 4:" + arg4 + " 5:" + arg5);
+        width = arg4 / nombreImages[X];
         height = arg5;
         return true;
     }
@@ -84,7 +84,10 @@ public class skillLancer implements ImageObserver {
         X++;
         imgNbr = nombreImages[X];
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
+        width = iSkill.getWidth(this)/ nombreImages[X];;
+        height = iSkill.getHeight(this);
         System.out.println(skillSelect[X]);
+        System.out.println(width+" "+height);
         }
     }
 
@@ -93,6 +96,8 @@ public class skillLancer implements ImageObserver {
             X--;
         imgNbr = nombreImages[X];
         iSkill = Toolkit.getDefaultToolkit().getImage("Images/"+ skillSelect[X]+".png");
+        width = iSkill.getWidth(this)/ nombreImages[X];;
+        height = iSkill.getHeight(this);
         }
     }
 }
